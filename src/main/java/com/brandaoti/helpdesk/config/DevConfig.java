@@ -1,6 +1,7 @@
 package com.brandaoti.helpdesk.config;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Profile;
@@ -8,16 +9,22 @@ import org.springframework.context.annotation.Profile;
 import com.brandaoti.helpdesk.services.DBService;
 
 @Configuration // Classe de configuração
-@Profile("test") //test que vem do application-test.properties depois do traço
-public class TestConfig {
+@Profile("dev") //test que vem do application-test.properties depois do traço
+public class DevConfig {
 	
 	@Autowired
 	private DBService dBService;
 	
+	@Value("${spring.jpa.hibernate.ddl-auto}")
+	private String value;
+	
 	//Toda vez que o test do aplication properties estiver ativo vai chamar de forma automatica (BEAN) esse metodo de instanciaDB
 	@Bean
-	public void instanciaDB() {
-		this.dBService.instanciaDB();
+	public boolean instanciaDB() {
+		if(value.equals("create")) { //Quero criar as tabelas
+			this.dBService.instanciaDB(); //Método que irá criar as tabelas
+		}
+		return false;
 	}
 	
 	

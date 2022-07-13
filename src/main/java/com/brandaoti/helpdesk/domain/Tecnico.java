@@ -7,13 +7,16 @@ import javax.persistence.Entity;
 import javax.persistence.OneToMany;
 
 import com.brandaoti.helpdesk.domain.enums.Perfil;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 @Entity
 public class Tecnico extends Pessoa {
 	private static final long serialVersionUID = 1L;
 	
+	@JsonIgnore
 	@OneToMany(mappedBy = "tecnico")
 	private List<Chamado> chamados = new ArrayList<>();
+	//JsonIgnore serve para nao ter loop quando for enviar uma lista, ele ignora o envio de chamados no postman.
 
 	public Tecnico() {
 		super();
