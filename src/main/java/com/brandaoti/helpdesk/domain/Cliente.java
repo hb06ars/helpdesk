@@ -14,15 +14,18 @@ public class Cliente extends Pessoa {
 	
 	private static final long serialVersionUID = 1L;
 	
+	//Para não devolver os chamados na API.
 	@JsonIgnore
 	@OneToMany(mappedBy = "cliente")
 	private List<Chamado> chamados = new ArrayList<>();
 
+	//Construtor sem parâmetros
 	public Cliente() {
 		super();
 		addPerfil(Perfil.CLIENTE);
 	}
 
+	//Construtor com parâmetros
 	public Cliente(Integer id, String nome, String cpf, String email, String senha) {
 		super(id, nome, cpf, email, senha);
 		addPerfil(Perfil.CLIENTE);

@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.brandaoti.helpdesk.domain.Tecnico;
+import com.brandaoti.helpdesk.exceptions.ObjectNotFoundException;
 import com.brandaoti.helpdesk.repositories.TecnicoRepository;
 
 @Service
@@ -16,7 +17,7 @@ public class TecnicoService {
 	
 	public Tecnico findById(Integer id) {
 		Optional<Tecnico> obj = repository.findById(id); //Optional, pode ou nao encontrar o obj
-		return obj.orElse(null);
+		return obj.orElseThrow(() -> new ObjectNotFoundException("Objeto não encontrado! Id: " + id) );
 	}
 	
 }

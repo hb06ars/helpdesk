@@ -44,10 +44,12 @@ public class Chamado implements Serializable{
 	@JoinColumn(name="cliente_id")
 	private Cliente cliente;
 	
+	//Construtor sem Parâmetros
 	public Chamado() {
 		super();
 	}
 
+	//Construtor com Parâmetros
 	public Chamado(Integer id, Prioridade prioridade, Status status, String titulo, String observacoes, Tecnico tecnico,
 			Cliente cliente) {
 		super();
@@ -61,7 +63,7 @@ public class Chamado implements Serializable{
 	}
 
 	
-	
+	//Hash para comparar dados.
 	@Override
 	public int hashCode() {
 		final int prime = 31;
@@ -70,6 +72,7 @@ public class Chamado implements Serializable{
 		return result;
 	}
 
+	//Hash para comparar dados.
 	@Override
 	public boolean equals(Object obj) {
 		if (this == obj)
