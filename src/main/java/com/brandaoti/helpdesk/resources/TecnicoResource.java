@@ -24,7 +24,7 @@ import com.brandaoti.helpdesk.services.TecnicoService;
 
 @RestController
 @RequestMapping(value="/tecnicos")
-public class TecnicoResources {
+public class TecnicoResource {
 	
 	@Autowired
 	private TecnicoService service;

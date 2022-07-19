@@ -24,7 +24,7 @@ import com.brandaoti.helpdesk.services.ClienteService;
 
 @RestController
 @RequestMapping(value="/clientes")
-public class ClienteResources {
+public class ClienteResource {
 	
 	@Autowired
 	private ClienteService service;
