@@ -8,12 +8,12 @@ import java.util.stream.Collectors;
 
 import javax.validation.constraints.NotNull;
 
-import com.brandaoti.helpdesk.domain.Tecnico;
+import com.brandaoti.helpdesk.domain.Cliente;
 import com.brandaoti.helpdesk.domain.enums.Perfil;
 import com.fasterxml.jackson.annotation.JsonFormat;
 
 //DTO padrão de Segurança para não retornar um objeto quando chamar a API e sim esse DTO.
-public class TecnicoDTO implements Serializable{
+public class ClienteDTO implements Serializable{
 	private static final long serialVersionUID = 1L;
 	
 	protected Integer id;
@@ -31,12 +31,12 @@ public class TecnicoDTO implements Serializable{
 	@JsonFormat(pattern="dd/MM/yyyy")
 	protected LocalDate dataCriacao = LocalDate.now();
 
-	public TecnicoDTO() {
+	public ClienteDTO() {
 		super();
 		addPerfil(Perfil.CLIENTE);
 	}
 
-	public TecnicoDTO(Tecnico obj) {
+	public ClienteDTO(Cliente obj) {
 		super();
 		this.id = obj.getId();
 		this.nome = obj.getNome();
