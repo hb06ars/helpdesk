@@ -48,7 +48,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 		//Abaixo eu asseguro que a sessão do usuário não será gravada.
 		http.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
 		//Autorizar requisicoes para o h2 console.
-		http.authorizeHttpRequests().antMatchers(PUBLIC_MATCHERS).permitAll().anyRequest().authenticated();
+		http.authorizeRequests().antMatchers(PUBLIC_MATCHERS).permitAll().anyRequest().authenticated();
 		
 	}
 	
