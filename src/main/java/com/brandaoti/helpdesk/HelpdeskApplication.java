@@ -1,3 +1,5 @@
+// Por onde a aplicação se inicia.
+
 package com.brandaoti.helpdesk;
 
 import org.springframework.boot.SpringApplication;
