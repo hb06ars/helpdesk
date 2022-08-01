@@ -2,7 +2,7 @@ package com.brandaoti.helpdesk.domain.enums;
 
 public enum Perfil {
 	
-	AMDIN(0, "ROLE_ADMIN"), CLIENTE(1, "ROLE_CLIENTE"), TECNICO(2, "ROLE_TECNICO");
+	ADMIN(0, "ROLE_ADMIN"), CLIENTE(1, "ROLE_CLIENTE"), TECNICO(2, "ROLE_TECNICO");
 	
 	private Integer codigo;
 	private String descricao;
