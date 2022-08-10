@@ -24,62 +24,52 @@ import com.brandaoti.helpdesk.security.JWTUtil;
 @EnableWebSecurity
 @EnableGlobalMethodSecurity(prePostEnabled = true)
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
-	
-	private static final String[] PUBLIC_MATCHERS = {"/h2-console/**"}; //Tudo que vier após essa URL será liberado.
-	
+
+	private static final String[] PUBLIC_MATCHERS = { "/h2-console/**" };
+
 	@Autowired
 	private Environment env;
 	@Autowired
 	private JWTUtil jwtUtil;
 	@Autowired
 	private UserDetailsService userDetailsService;
-	
-	
+
 	@Override
 	protected void configure(HttpSecurity http) throws Exception {
 		//Verificar se está no modo de test e não de desenvolvimento, para liberar o h2 console.
-		if(Arrays.asList(env.getActiveProfiles()).contains("test")) {
+		if (Arrays.asList(env.getActiveProfiles()).contains("test")) {
 			http.headers().frameOptions().disable();
 		}
-		
+
 		// Aqui ele desabilida a proteção contra ataque csrf (Baseado em armazenamento de Sessoes de usuario).
 		//Como a aplicação nao vai armazenar sessoes de usuario, então eu posso desabilitar.
 		http.cors().and().csrf().disable();
-		
 		http.addFilter(new JWTAuthenticationFilter(authenticationManager(), jwtUtil));
-		
 		http.addFilter(new JWTAuthorizationFilter(authenticationManager(), jwtUtil, userDetailsService));
-		
-		//Abaixo eu asseguro que a sessão do usuário não será gravada.
-		http.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
 		//Autorizar requisicoes para o h2 console.
 		http.authorizeRequests().antMatchers(PUBLIC_MATCHERS).permitAll().anyRequest().authenticated();
 		
+		//Abaixo eu asseguro que a sessão do usuário não será gravada.
+		http.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
 	}
-	
+
 	@Override
 	protected void configure(AuthenticationManagerBuilder auth) throws Exception {
 		auth.userDetailsService(userDetailsService).passwordEncoder(bCryptPasswordEncoder());
 	}
-	
+
 	@Bean
-	CorsConfigurationSource corsConfigurattionSource() {
-		CorsConfiguration configuration = new CorsConfiguration().applyPermitDefaultValues(); //Libera métodos como GET e POST.
-		configuration.setAllowedMethods(Arrays.asList("POST","GET","PUT","DELETE","OPTIONS"));
+	CorsConfigurationSource corsConfigurationSource() {
+		CorsConfiguration configuration = new CorsConfiguration().applyPermitDefaultValues();
+		configuration.setAllowedMethods(Arrays.asList("POST", "GET", "PUT", "DELETE", "OPTIONS"));
 		final UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
 		source.registerCorsConfiguration("/**", configuration);
 		return source;
 	}
-	
-	
+
 	@Bean
 	public BCryptPasswordEncoder bCryptPasswordEncoder() {
 		return new BCryptPasswordEncoder();
 	}
-	
-	
-	
-	
-	
-	
+
 }

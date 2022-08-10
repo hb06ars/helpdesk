@@ -29,7 +29,7 @@ public class JWTAuthorizationFilter extends BasicAuthenticationFilter{
 	@Override
 	protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain chain)
 			throws IOException, ServletException {
-		//Pegar o campo authorization do Header que inputa no Postman.
+		//Pegar o campo authorization do Header que inputa no Postman. 
 		String header = request.getHeader("Authorization");
 		//Se header inicia com Bearer ...
 		if(header != null && header.startsWith("Bearer ") ) {
