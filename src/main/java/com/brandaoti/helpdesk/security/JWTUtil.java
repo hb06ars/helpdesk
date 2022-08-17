@@ -4,7 +4,6 @@ import java.util.Date;
 
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
-// Essa classe é a chave de nossa autenticação.
 
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
@@ -15,9 +14,10 @@ public class JWTUtil {
 	
 	@Value("${jwt.expiration}")
 	private Long expiration;
+	
 	@Value("${jwt.secret}")
 	private String secret;
-	
+
 	// Método que irá gerar o token.
 	public String generateToken(String email) {
 		return Jwts.builder()
@@ -33,6 +33,7 @@ public class JWTUtil {
 			String username = claims.getSubject();
 			Date expirationDate = claims.getExpiration();
 			Date now = new Date(System.currentTimeMillis());
+			
 			if(username != null && expirationDate != null && now.before(expirationDate)) {
 				return true;
 			}
@@ -43,7 +44,7 @@ public class JWTUtil {
 	private Claims getClaims(String token) {
 		try {
 			return Jwts.parser().setSigningKey(secret.getBytes()).parseClaimsJws(token).getBody();
-		} catch(Exception e) {
+		} catch (Exception e) {
 			return null;
 		}
 	}
@@ -55,7 +56,4 @@ public class JWTUtil {
 		}
 		return null;
 	}
-
-	
-	
 }

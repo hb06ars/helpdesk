@@ -10,17 +10,15 @@ import org.springframework.security.core.userdetails.UserDetails;
 
 import com.brandaoti.helpdesk.domain.enums.Perfil;
 
-public class UserSS implements UserDetails{
+public class UserSS implements UserDetails {
 	//Regras de negócios que podemos implementar ao cliente, por exemplo: Conta expirada, Senha expirada, etc...
-	
 	private static final long serialVersionUID = 1L;
+	
 	private Integer id;
 	private String email;
 	private String senha;
 	private Collection<? extends GrantedAuthority> authorities;
-	
-	
-	
+
 	public UserSS(Integer id, String email, String senha, Set<Perfil> perfis) {
 		super();
 		this.id = id;
@@ -31,10 +29,6 @@ public class UserSS implements UserDetails{
 
 	public Integer getId() {
 		return id;
-	}
-
-	public void setId(Integer id) {
-		this.id = id;
 	}
 
 	@Override
@@ -71,8 +65,5 @@ public class UserSS implements UserDetails{
 	public boolean isEnabled() {
 		return true;
 	}
-	
-	
-	
-	
+
 }

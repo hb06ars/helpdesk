@@ -18,31 +18,29 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 import com.brandaoti.helpdesk.dtos.CredenciaisDTO;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
-public class JWTAuthenticationFilter extends UsernamePasswordAuthenticationFilter{
+public class JWTAuthenticationFilter extends UsernamePasswordAuthenticationFilter {
 	
 	// Principal interface para autenticação.
 	private AuthenticationManager authenticationManager;
-	private JWTUtil jWTUtil;
-	
-	
-	
-	public JWTAuthenticationFilter(AuthenticationManager authenticationManager, JWTUtil jWTUtil) {
+	private JWTUtil jwtUtil;
+
+	public JWTAuthenticationFilter(AuthenticationManager authenticationManager, JWTUtil jwtUtil) {
 		super();
 		this.authenticationManager = authenticationManager;
-		this.jWTUtil = jWTUtil;
+		this.jwtUtil = jwtUtil;
 	}
-	
-	
+
 	//Tentativa de autenticação.
 	@Override
 	public Authentication attemptAuthentication(HttpServletRequest request, HttpServletResponse response)
 			throws AuthenticationException {
 		try {
 			CredenciaisDTO creds = new ObjectMapper().readValue(request.getInputStream(), CredenciaisDTO.class);
-			UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(creds.getEmail(), creds.getSenha(), new ArrayList<>());
+			UsernamePasswordAuthenticationToken authenticationToken = 
+					new UsernamePasswordAuthenticationToken(creds.getEmail(), creds.getSenha(), new ArrayList<>());
 			Authentication authentication = authenticationManager.authenticate(authenticationToken);
 			return authentication;
-		} catch(Exception e) {
+		} catch (Exception e) {
 			throw new RuntimeException(e);
 		}
 	}
@@ -53,11 +51,11 @@ public class JWTAuthenticationFilter extends UsernamePasswordAuthenticationFilte
 			Authentication authResult) throws IOException, ServletException {
 		
 		String username = ((UserSS) authResult.getPrincipal()).getUsername();
-		String token = jWTUtil.generateToken(username);
+		String token = jwtUtil.generateToken(username);
 		response.setHeader("access-control-expose-headers", "Authorization");
 		response.setHeader("Authorization", "Bearer " + token);
 	}
-
+	
 	//Caso a autenticação NÃO ocorra.
 	@Override
 	protected void unsuccessfulAuthentication(HttpServletRequest request, HttpServletResponse response,
@@ -66,18 +64,16 @@ public class JWTAuthenticationFilter extends UsernamePasswordAuthenticationFilte
 		response.setStatus(401);
 		response.setContentType("application/json");
 		response.getWriter().append(json());
-		
 	}
-
 
 	private CharSequence json() {
 		long date = new Date().getTime();
 		return "{"
-			+ "\"timestamp\": " + date + ", "
-			+ "\"status\": 401"
-			+ "\"error\": \"Não autorizado\", "
-			+ "\"message\": \"Email ou Senha inválidos\", "
-			+ "\"path\": \"login\"}";
+				+ "\"timestamp\": " + date + ", " 
+				+ "\"status\": 401, "
+				+ "\"error\": \"Não autorizado\", "
+				+ "\"message\": \"Email ou senha inválidos\", "
+				+ "\"path\": \"/login\"}";
 	}
 	
 }

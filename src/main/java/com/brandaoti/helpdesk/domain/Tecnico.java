@@ -14,11 +14,11 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 @Entity
 public class Tecnico extends Pessoa {
 	private static final long serialVersionUID = 1L;
-	
+
+	//JsonIgnore serve para nao ter loop quando for enviar uma lista, ele ignora o envio de chamados no postman.
 	@JsonIgnore
 	@OneToMany(mappedBy = "tecnico")
 	private List<Chamado> chamados = new ArrayList<>();
-	//JsonIgnore serve para nao ter loop quando for enviar uma lista, ele ignora o envio de chamados no postman.
 
 	public Tecnico() {
 		super();
@@ -29,14 +29,6 @@ public class Tecnico extends Pessoa {
 		super(id, nome, cpf, email, senha);
 		addPerfil(Perfil.CLIENTE);
 	}
-
-	public List<Chamado> getChamados() {
-		return chamados;
-	}
-
-	public void setChamados(List<Chamado> chamados) {
-		this.chamados = chamados;
-	}	
 	
 	public Tecnico(TecnicoDTO obj) {
 		super();
@@ -48,5 +40,13 @@ public class Tecnico extends Pessoa {
 		this.perfis = obj.getPerfis().stream().map(x -> x.getCodigo()).collect(Collectors.toSet());
 		this.dataCriacao = obj.getDataCriacao();
 	}
-	
+
+	public List<Chamado> getChamados() {
+		return chamados;
+	}
+
+	public void setChamados(List<Chamado> chamados) {
+		this.chamados = chamados;
+	}
+
 }

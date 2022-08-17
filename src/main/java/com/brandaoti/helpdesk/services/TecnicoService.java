@@ -19,18 +19,17 @@ import com.brandaoti.helpdesk.repositories.TecnicoRepository;
 
 @Service
 public class TecnicoService {
-	
+
 	@Autowired
 	private TecnicoRepository repository;
 	@Autowired
 	private PessoaRepository pessoaRepository;
 	@Autowired
 	private BCryptPasswordEncoder encoder;
-	
-	
+
 	public Tecnico findById(Integer id) {
-		Optional<Tecnico> obj = repository.findById(id); //Optional, pode ou nao encontrar o obj
-		return obj.orElseThrow(() -> new ObjectNotFoundException("Objeto não encontrado! Id: " + id) );
+		Optional<Tecnico> obj = repository.findById(id);  //Optional, pode ou nao encontrar o obj
+		return obj.orElseThrow(() -> new ObjectNotFoundException("Objeto não encontrado! ID: " + id));
 	}
 
 	public List<Tecnico> findAll() {
@@ -41,16 +40,17 @@ public class TecnicoService {
 		objDTO.setId(null);
 		objDTO.setSenha(encoder.encode(objDTO.getSenha()));
 		validaPorCpfEEmail(objDTO);
-		Tecnico newObj = new Tecnico(objDTO); 
+		Tecnico newObj = new Tecnico(objDTO);
 		return repository.save(newObj);
 	}
-
+ 
 	public Tecnico update(Integer id, @Valid TecnicoDTO objDTO) {
 		objDTO.setId(id);
 		Tecnico oldObj = findById(id);
-		if(!objDTO.getSenha().equals(oldObj.getSenha())) {
+		
+		if(!objDTO.getSenha().equals(oldObj.getSenha())) 
 			objDTO.setSenha(encoder.encode(objDTO.getSenha()));
-		}
+		
 		validaPorCpfEEmail(objDTO);
 		oldObj = new Tecnico(objDTO);
 		return repository.save(oldObj);
@@ -58,29 +58,24 @@ public class TecnicoService {
 
 	public void delete(Integer id) {
 		Tecnico obj = findById(id);
-		if(obj.getChamados().size() > 0) {
-			throw new DataIntegrityViolationException("O técnico possui ordens de serviço e não podem ser deletado!");
+
+		if (obj.getChamados().size() > 0) {
+			throw new DataIntegrityViolationException("Técnico possui ordens de serviço e não pode ser deletado!");
 		}
+
 		repository.deleteById(id);
 	}
 
 	private void validaPorCpfEEmail(TecnicoDTO objDTO) {
 		Optional<Pessoa> obj = pessoaRepository.findByCpf(objDTO.getCpf());
-		if(obj.isPresent() && obj.get().getId() != objDTO.getId()) {
-			//Caso haja um CPF mas nao é esse CPF no banco (CPF Duplicado)
-			throw new DataIntegrityViolationException("CPF já cadastrado no sistema");
+		if (obj.isPresent() && obj.get().getId() != objDTO.getId()) {
+			throw new DataIntegrityViolationException("CPF já cadastrado no sistema!");
 		}
-		
+
 		obj = pessoaRepository.findByEmail(objDTO.getEmail());
-		if(obj.isPresent() && obj.get().getId() != objDTO.getId()) {
-			//Caso haja um CPF mas nao é esse CPF no banco (CPF Duplicado)
-			throw new DataIntegrityViolationException("Email já cadastrado no sistema");
+		if (obj.isPresent() && obj.get().getId() != objDTO.getId()) {
+			throw new DataIntegrityViolationException("E-mail já cadastrado no sistema!");
 		}
 	}
 
-	
-
-	
-	
-	
 }

@@ -14,10 +14,10 @@ import com.brandaoti.helpdesk.security.UserSS;
 
 @Service
 public class UserDetailsServiceImpl implements UserDetailsService{
-
+	
 	@Autowired
 	private PessoaRepository repository;
-	
+
 	@Override
 	public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
 		Optional<Pessoa> user = repository.findByEmail(email);
@@ -26,8 +26,5 @@ public class UserDetailsServiceImpl implements UserDetailsService{
 		}
 		throw new UsernameNotFoundException(email);
 	}
-	
-	
-	
-	
+
 }

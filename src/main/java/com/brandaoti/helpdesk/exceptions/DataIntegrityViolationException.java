@@ -1,8 +1,7 @@
 package com.brandaoti.helpdesk.exceptions;
 
-// Usada para tratamento de erros.
-
-public class DataIntegrityViolationException extends RuntimeException{
+//Usada para tratamento de erros.
+public class DataIntegrityViolationException extends RuntimeException {
 	private static final long serialVersionUID = 1L;
 
 	public DataIntegrityViolationException(String message, Throwable cause) {
@@ -13,6 +12,4 @@ public class DataIntegrityViolationException extends RuntimeException{
 		super(message);
 	}
 
-	
-	
 }

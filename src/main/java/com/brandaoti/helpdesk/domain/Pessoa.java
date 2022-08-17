@@ -15,8 +15,6 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 
-import org.hibernate.validator.constraints.br.CPF;
-
 import com.brandaoti.helpdesk.domain.enums.Perfil;
 import com.fasterxml.jackson.annotation.JsonFormat;
 
@@ -24,7 +22,7 @@ import com.fasterxml.jackson.annotation.JsonFormat;
 // protect porque todos os tecnicos e clientes que herdarem a pessoa poderao acessar os dados.
 
 @Entity
-public abstract class Pessoa implements Serializable{
+public abstract class Pessoa implements Serializable {
 	private static final long serialVersionUID = 1L;
 	
 	@Id
@@ -32,108 +30,26 @@ public abstract class Pessoa implements Serializable{
 	protected Integer id;
 	protected String nome;
 	
-	@CPF
-	@Column (unique = true)
+	@Column(unique = true)
 	protected String cpf;
 	
-	@Column (unique = true)
+	@Column(unique = true)
 	protected String email;
 	protected String senha;
 	
 	@ElementCollection(fetch = FetchType.EAGER)
-	@CollectionTable(name="PERFIS")
+	@CollectionTable(name = "PERFIS")
 	protected Set<Integer> perfis = new HashSet<>(); //Não permite 2 valores iguais na lista.
 	
-	@JsonFormat(pattern="dd/MM/yyyy")
+	@JsonFormat(pattern = "dd/MM/yyyy")
 	protected LocalDate dataCriacao = LocalDate.now();
+
+	//Construtor da classe sem parâmetros
+	public Pessoa() {
+		super();
+		addPerfil(Perfil.CLIENTE); // Aqui todo usuario criado vai ter o Perfil de Cliente pelo menos.
+	}
 	
-	
-	
-	public Integer getId() {
-		return id;
-	}
-
-
-
-	public void setId(Integer id) {
-		this.id = id;
-	}
-
-
-
-	public String getNome() {
-		return nome;
-	}
-
-
-
-	public void setNome(String nome) {
-		this.nome = nome;
-	}
-
-
-
-	public String getCpf() {
-		return cpf;
-	}
-
-
-
-	public void setCpf(String cpf) {
-		this.cpf = cpf;
-	}
-
-
-
-	public String getEmail() {
-		return email;
-	}
-
-
-
-	public void setEmail(String email) {
-		this.email = email;
-	}
-
-
-
-	public String getSenha() {
-		return senha;
-	}
-
-
-
-	public void setSenha(String senha) {
-		this.senha = senha;
-	}
-
-
-
-	public Set<Perfil> getPerfis() {
-		//Como um for...
-		return perfis.stream().map(x -> Perfil.toenum(x)).collect(Collectors.toSet());
-	}
-
-
-
-	public void addPerfil(Perfil perfil) {
-		this.perfis.add(perfil.getCodigo());
-	}
-
-
-
-	public LocalDate getDataCriacao() {
-		return dataCriacao;
-	}
-
-
-
-	public void setDataCriacao(LocalDate dataCriacao) {
-		this.dataCriacao = dataCriacao;
-	}
-
-
-
 	//Construtor da classe com parâmetros
 	public Pessoa(Integer id, String nome, String cpf, String email, String senha) {
 		super();
@@ -145,14 +61,62 @@ public abstract class Pessoa implements Serializable{
 		addPerfil(Perfil.CLIENTE); // Aqui todo usuario criado vai ter o Perfil de Cliente pelo menos.
 	}
 
-
-	//Construtor da classe sem parâmetros
-	public Pessoa() {
-		super();
-		addPerfil(Perfil.CLIENTE); // Aqui todo usuario criado vai ter o Perfil de Cliente pelo menos.
+	public Integer getId() {
+		return id;
 	}
 
+	public void setId(Integer id) {
+		this.id = id;
+	}
 
+	public String getNome() {
+		return nome;
+	}
+
+	public void setNome(String nome) {
+		this.nome = nome;
+	}
+
+	public String getCpf() {
+		return cpf;
+	}
+
+	public void setCpf(String cpf) {
+		this.cpf = cpf;
+	}
+
+	public String getEmail() {
+		return email;
+	}
+
+	public void setEmail(String email) {
+		this.email = email;
+	}
+
+	public String getSenha() {
+		return senha;
+	}
+
+	public void setSenha(String senha) {
+		this.senha = senha;
+	}
+
+	public Set<Perfil> getPerfis() {
+		return perfis.stream().map(x -> Perfil.toEnum(x)).collect(Collectors.toSet());
+	}
+
+	public void addPerfil(Perfil perfil) {
+		this.perfis.add(perfil.getCodigo());
+	}
+
+	public LocalDate getDataCriacao() {
+		return dataCriacao;
+	}
+
+	public void setDataCriacao(LocalDate dataCriacao) {
+		this.dataCriacao = dataCriacao;
+	}
+	
 	//Generate Hashcode e equals Serve para fazer comparação de objeto por valor dele, exemplo CPF ou ID.
 	@Override
 	public int hashCode() {
@@ -162,7 +126,6 @@ public abstract class Pessoa implements Serializable{
 		result = prime * result + ((id == null) ? 0 : id.hashCode());
 		return result;
 	}
-
 
 	//Generate Hashcode e equals Serve para fazer comparação de objeto por valor dele, exemplo CPF ou ID.
 	@Override
@@ -186,9 +149,5 @@ public abstract class Pessoa implements Serializable{
 			return false;
 		return true;
 	}
-	
-	
-	
-	
-	
+
 }

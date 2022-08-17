@@ -40,7 +40,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 		if (Arrays.asList(env.getActiveProfiles()).contains("test")) {
 			http.headers().frameOptions().disable();
 		}
-
+		
 		// Aqui ele desabilida a proteção contra ataque csrf (Baseado em armazenamento de Sessoes de usuario).
 		//Como a aplicação nao vai armazenar sessoes de usuario, então eu posso desabilitar.
 		http.cors().and().csrf().disable();
@@ -48,7 +48,6 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 		http.addFilter(new JWTAuthorizationFilter(authenticationManager(), jwtUtil, userDetailsService));
 		//Autorizar requisicoes para o h2 console.
 		http.authorizeRequests().antMatchers(PUBLIC_MATCHERS).permitAll().anyRequest().authenticated();
-		
 		//Abaixo eu asseguro que a sessão do usuário não será gravada.
 		http.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
 	}

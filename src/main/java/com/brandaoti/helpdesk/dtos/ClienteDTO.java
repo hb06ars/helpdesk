@@ -8,27 +8,28 @@ import java.util.stream.Collectors;
 
 import javax.validation.constraints.NotNull;
 
+import org.hibernate.validator.constraints.br.CPF;
+
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.brandaoti.helpdesk.domain.Cliente;
 import com.brandaoti.helpdesk.domain.enums.Perfil;
-import com.fasterxml.jackson.annotation.JsonFormat;
 
-//DTO padrão de Segurança para não retornar um objeto quando chamar a API e sim esse DTO.
-public class ClienteDTO implements Serializable{
+public class ClienteDTO implements Serializable {
 	private static final long serialVersionUID = 1L;
-	
+
 	protected Integer id;
-	
-	@NotNull(message = "O campo nome é requerido")
+	@NotNull(message = "O campo NOME é requerido")
 	protected String nome;
 	@NotNull(message = "O campo CPF é requerido")
+	@CPF
 	protected String cpf;
-	@NotNull(message = "O campo email é requerido")
+	@NotNull(message = "O campo EMAIL é requerido")
 	protected String email;
-	@NotNull(message = "O campo senha é requerido")
+	@NotNull(message = "O campo SENHA é requerido")
 	protected String senha;
-	protected Set<Integer> perfis = new HashSet<>(); //Não permite 2 valores iguais na lista.
-	
-	@JsonFormat(pattern="dd/MM/yyyy")
+	protected Set<Integer> perfis = new HashSet<>();
+
+	@JsonFormat(pattern = "dd/MM/yyyy")
 	protected LocalDate dataCriacao = LocalDate.now();
 
 	public ClienteDTO() {
@@ -89,7 +90,7 @@ public class ClienteDTO implements Serializable{
 	}
 
 	public Set<Perfil> getPerfis() {
-		return perfis.stream().map(x -> Perfil.toenum(x)).collect(Collectors.toSet());
+		return perfis.stream().map(x -> Perfil.toEnum(x)).collect(Collectors.toSet());
 	}
 
 	public void addPerfil(Perfil perfil) {
@@ -103,8 +104,5 @@ public class ClienteDTO implements Serializable{
 	public void setDataCriacao(LocalDate dataCriacao) {
 		this.dataCriacao = dataCriacao;
 	}
-	
-	
-	
 
 }

@@ -14,13 +14,13 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.web.authentication.www.BasicAuthenticationFilter;
 
-public class JWTAuthorizationFilter extends BasicAuthenticationFilter{
+public class JWTAuthorizationFilter extends BasicAuthenticationFilter {
 
 	private JWTUtil jwtUtil;
 	private UserDetailsService userDetailsService;
-	
-	
-	public JWTAuthorizationFilter(AuthenticationManager authenticationManager, JWTUtil jwtUtil, UserDetailsService userDetailsService) {
+
+	public JWTAuthorizationFilter(AuthenticationManager authenticationManager, JWTUtil jwtUtil,
+			UserDetailsService userDetailsService) {
 		super(authenticationManager);
 		this.jwtUtil = jwtUtil;
 		this.userDetailsService = userDetailsService;
@@ -29,10 +29,10 @@ public class JWTAuthorizationFilter extends BasicAuthenticationFilter{
 	@Override
 	protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain chain)
 			throws IOException, ServletException {
-		//Pegar o campo authorization do Header que inputa no Postman. 
+		//Pegar o campo authorization do Header que inputa no Postman.
 		String header = request.getHeader("Authorization");
 		//Se header inicia com Bearer ...
-		if(header != null && header.startsWith("Bearer ") ) {
+		if(header != null && header.startsWith("Bearer ")) {
 			UsernamePasswordAuthenticationToken authToken = getAuthentication(header.substring(7));
 			if(authToken != null) {
 				SecurityContextHolder.getContext().setAuthentication(authToken);
@@ -49,9 +49,16 @@ public class JWTAuthorizationFilter extends BasicAuthenticationFilter{
 		}
 		return null;
 	}
-	
 
 }
+
+
+
+
+
+
+
+
 
 
 
